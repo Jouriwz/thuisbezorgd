@@ -4,6 +4,7 @@ use App\User;
 use App\Restaurant;
 use App\Order;
 use App\Consumable;
+use App\Openingtime;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -23,6 +24,7 @@ class DatabaseSeeder extends Seeder
         $user->phone = '061234567';
         $user->email = '186078@talnet.nl';
         $user->password = bcrypt('testtest');
+        $user->is_admin = 1;
         $user->save();
 
         $user = new User();
@@ -64,5 +66,17 @@ class DatabaseSeeder extends Seeder
         $restaurant->email = 'PeePee@talnet.nl';
         $restaurant->user_id = 2;
         $restaurant->save();
+
+        $openingtime = new Openingtime;
+        $openingtime->restaurant_id = 1;
+        $openingtime->open = '09:00:00';
+        $openingtime->close = '18:00:00';
+        $openingtime->save();
+
+        $openingtime = new Openingtime;
+        $openingtime->restaurant_id = 2;
+        $openingtime->open = '12:00:00';
+        $openingtime->close = '20:00:00';
+        $openingtime->save();
     }
 }

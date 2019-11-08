@@ -7,6 +7,8 @@ use Auth;
 use App\Restaurant;
 use App\User;
 use App\Consumable;
+use App\Openingtime;
+use Carbon\Carbon;
 
 class RestaurantController extends Controller
 {
@@ -46,7 +48,9 @@ class RestaurantController extends Controller
             'city' => ['required', 'string', 'max:255'],
             'zipcode' => ['required', 'string', 'max:7'],
             'phone' => ['required', 'numeric', 'digits_between:8,12', 'unique:restaurants'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:restaurants']
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:restaurants'],
+            'open' => ['required'],
+            'close' => ['required']
         ]);
 
         // Create a new restaurant
@@ -60,6 +64,13 @@ class RestaurantController extends Controller
         $restaurant->user_id = Auth::id();
         $restaurant->save();
 
+        // Create the openingtimes for the restaurant
+        $openingtimes = new Openingtime();
+        $openingtimes->restaurant_id = $restaurant->id;
+        $openingtimes->open = $request->open;
+        $openingtimes->close = $request->close;
+        $openingtimes->save();
+
         return redirect()->route('restaurant.show', ['restaurant' => $restaurant->id]);
     }
 
@@ -68,8 +79,18 @@ class RestaurantController extends Controller
         // Variable to hold the current user
         $user = Auth::user();
         // variable that holds the current restaurant
-        $rest = Restaurant::where('id', $id)->with('consumables')->get();
-
+        $rest = Restaurant::where('id', $id)->with('consumables', 'openingtimes')->get();
+        // Store the opening, closing and current time in a variable
+        $open = $rest[0]->openingtimes->open;
+        $close = $rest[0]->openingtimes->close;
+        $now = carbon::now()->format('H:i:s');
+        // If the restaurant is open now, return 1
+        if ($now >= $open && $now <= $close) {
+            $isOpen = 1;
+        } else {
+            $isOpen = 0;
+        }
+        
         // Creates the categories
         $food = [];
         $drinks = [];
@@ -95,6 +116,7 @@ class RestaurantController extends Controller
             'foods' => $food,
             'drinks' => $drinks,
             'sides' => $sides,
+            'isOpen' => $isOpen,
         ]);
     }
 
