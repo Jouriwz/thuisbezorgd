@@ -1,73 +1,158 @@
 @extends('layouts.app')
-
 @section('content')
-@foreach ($errors->all() as $message)
-    <div class="alert alert-danger" role="alert">
-        {{$message}}
-    </div>
-@endforeach
 
-<form enctype="multipart/form-data" style="margin-top: 2vh" method="POST" action="{{ route('admin.profiles.update', ['profile' => $user->id]) }}">
-    @method('PATCH')
-    @csrf
-    <h3>Profiel</h3>
-    <hr>
-    <div class="row">
-        <div class="col-md-3">
-            <h4>Mijn gegevens</h4>
-        </div>
-        <div class="col-md-9">
-            <div class="form-group">
-                <label for="emailInput">Email adres</label>
-                <input type="email" class="form-control @error('email') is-invalid @enderror" id="emailInput" name="email" value="{{$user->email}}">
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="passwordInput">Password</label>
-                    <input type="password" class="form-control @error('password') is-invalid @enderror" id="passwordInput" name="password">
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="repeatpasswordInput">Repeat password</label>
-                    <input type="password" class="form-control @error('password') is-invalid @enderror" id="repeatpasswordInput" name="password_confirmation">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card mt-4">
+                <div class="card-header" style="background-color: #40e0d0;">{{ __('Edit Profile') }}</div>
+
+                <div class="card-body" style="background-color: #f5f5dc;">
+                    {{-- routes it to the profile.update with the current user ID --}}
+                    <form enctype="multipart/form-data" method="POST" action="{{ route('admin.profiles.update', ['profile' => $user->id]) }}">
+                        @method('PATCH')
+                        @csrf
+
+                        {{-- name --}}
+                        <div class="form-group row">
+                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ $user->name }}" required autocomplete="name" autofocus>
+
+                                @error('name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        {{-- address --}}
+                        <div class="form-group row">
+                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Address') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="name" type="text" class="form-control @error('address') is-invalid @enderror" name="address" value="{{ $user->address }}" required autocomplete="address" autofocus>
+
+                                @error('address')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        {{-- city --}}
+                        <div class="form-group row">
+                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('City') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="name" type="text" class="form-control @error('city') is-invalid @enderror" name="city" value="{{ $user->city }}" required autocomplete="city">
+
+                                @error('city')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        {{-- Zipcode --}}
+                        <div class="form-group row">
+                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Zipcode') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="name" type="text" class="form-control @error('zipcode') is-invalid @enderror" name="zipcode" value="{{ $user->zipcode }}" required autocomplete="zipcode" autofocus>
+
+                                @error('zipcode')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        {{-- phone --}}
+                        <div class="form-group row">
+                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Phone') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="name" type="text" class="form-control @error('phone') is-invalid @enderror" name="phone" value="{{ $user->phone}}" required autocomplete="phone" autofocus>
+
+                                @error('phone')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        {{-- email --}}
+                        <div class="form-group row">
+                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ $user->email }}" required autocomplete="email">
+
+                                @error('email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        {{-- password --}}
+                        <div class="form-group row">
+                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+
+                                @error('password')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        {{-- confirm password --}}
+                        <div class="form-group row">
+                            <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                            </div>
+                        </div>
+
+                        {{-- Is Admin --}}
+                        <div class="form-group form-check">
+                            <label class="col-md-4 col-form-label text-md-right form-check-label" for="isAdminCheck">Admin</label>
+                            <div class="col-md-6">
+                                <input type="checkbox" class="form-check-input" id="isAdminCheck" name="is_admin" @if($user->is_admin) checked="checked" @endif>
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-0">
+                            <div class="col-md-6 offset-md-4">
+                                <button type="submit" class="btn btn-primary">
+                                    {{ __('Edit') }}
+                                </button>
+                            </div>
+                        </div>
+                        
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-    <hr>
-    <div class="row">
-        <div class="col-md-3">
-            <h4>Personal information</h4>
-        </div>
-        <div class="col-md-9">
-            <div class="form-group">
-                <label for="nameInput">Naam</label>
-                <input type="text" class="form-control @error('name') is-invalid @enderror" id="nameInput" name="name" value="{{$user->name}}">
-            </div>
-            <div class="form-group">
-                <label for="addresstInput">Adres</label>
-                <input type="text" class="form-control @error('address') is-invalid @enderror" id="addressInput" name="address" value="{{$user->address}}">
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="cityInput">Plaats</label>
-                    <input type="text" class="form-control @error('city') is-invalid @enderror" id="cityInput" name="city" value="{{$user->city}}">
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="zipcodeInput">Postcode</label>
-                    <input type="text" class="form-control @error('zipcode') is-invalid @enderror" id="zipcodeInput" name="zipcode" value="{{$user->zipcode}}">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="phoneInput">Telefoon nummer</label>
-                <input type="number" class="form-control @error('phone') is-invalid @enderror" id="phoneInput" name="phone" value="{{$user->phone}}">
-            </div>
-            <div class="form-group form-check">
-                <input type="checkbox" class="form-check-input" id="isAdminCheck" name="is_admin" @if($user->is_admin) checked="checked" @endif>
-                <label class="form-check-label" for="isAdminCheck">Admin</label>
-            </div>
-            
-        </div>
-    </div>
-    <button type="submit" class="btn btn-primary">Bewerken</button>
-</form>
 @endsection
+
+{{-- 
+<form enctype="multipart/form-data" method="POST" action="{{ route('admin.profiles.update', ['profile' => $user->id]) }}">
+
+<div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="isAdminCheck" name="is_admin" @if($user->is_admin) checked="checked" @endif>
+        <label class="form-check-label" for="isAdminCheck">Admin</label>
+    </div> --}}
