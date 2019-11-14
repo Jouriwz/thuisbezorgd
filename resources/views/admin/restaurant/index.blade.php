@@ -1,56 +1,38 @@
 @extends('layouts.admin')
 
 @section('content')
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">ID</th>
-      <th scope="col">Naam</th>
-      <th scope="col">email</th>
-      <th scope="col">Bewerken</th>
-      <th scope="col">Verwijderen</th>
-      <th scope="col">Bekijken</th>
-    </tr>
-  </thead>
-  <tbody>
-	@foreach($restaurants as $restaurant)
-		<tr>
-	      <th scope="row">{{$restaurant->id}}</th>
-	      <td>{{$restaurant->title}}</td>
-	      <td>{{$restaurant->email}}</td>
-	      <td><a href="{{route('admin.restaurants.edit', ['restaurant' => $restaurant->id])}}" class="btn btn-primary">Bewerken</a></td>
-	      <td><button class="btn btn-danger" type="button" data-toggle="modal" data-target="#delete{{$restaurant->id}}">Verwijderen</button></td>
-	      <td><a href="{{route('restaurant.show', ['restaurant' => $restaurant->id])}}" class="btn btn-warning">Bekijken</a></td>
-	    </tr>
-	@endforeach
-  </tbody>
+<table class="table table-bordered" style="background-color: #f5f5dc;">
+    <thead style="background-color: #40e0d0;">
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Owner id</th>
+            <th scope="col">Email</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
+            <th scope="col">View</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($restaurants as $restaurant)
+        <tr>
+            <th>{{$restaurant->id}}</th>
+            <td>{{$restaurant->title}}</td>
+            <td>{{$restaurant->user_id}}</td>
+            <td>{{$restaurant->email}}</td>
+            <td><a href="{{route('admin.restaurants.edit', ['restaurant' => $restaurant->id])}}"
+                    class="btn btn-primary">Edit</a></td>
+            <td>
+                <form action="{{route('admin.restaurants.destroy', ['restaurant' => $restaurant->id])}}" method="POST">
+                    @csrf
+                    @method('delete')
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </td>
+            <td><a href="{{route('restaurant.show', ['restaurant' => $restaurant->id])}}"
+                    class="btn btn-warning">View</a></td>
+        </tr>
+        @endforeach
+    </tbody>
 </table>
-
-{{ $restaurants->links() }}
-
-@foreach($restaurants as $restaurant)
-  <div class="modal fade" id="delete{{$restaurant->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Gegevens van {{$restaurant->title}}</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          Weet je zeker dat je {{$restaurant->title}} inclusief al hun versnaperingen wilt verwijderen?
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Sluiten</button>
-          <form action="{{route('admin.restaurants.destroy', ['restaurant' => $restaurant->id])}}" method="POST">
-            @csrf
-            @method('delete')
-            <button type="submit" class="btn btn-danger">Ja</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-@endforeach
 @endsection

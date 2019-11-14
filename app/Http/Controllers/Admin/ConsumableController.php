@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Consumable;
-use Image;
 
 class ConsumableController extends Controller
 {
@@ -90,9 +89,9 @@ class ConsumableController extends Controller
         $consumable = Consumable::find($id);
         $requestData = $request->all();
         $validateArray = [
-            'title' => ['required', 'string', 'max:191'],
+            'title' => ['required', 'string', 'max:255'],
             'category' => ['required', 'numeric'],
-            'price' => ['required', 'numeric', 'between:0,99.99'],
+            'price' => ['required', 'numeric',],
         ];
         if ($request->photo != null) {
             $validateArray += ['photo' => ['required', 'image']];

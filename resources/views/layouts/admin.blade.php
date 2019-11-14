@@ -24,18 +24,15 @@
 </head>
 <body>
     @include('partials.navbar')
-    <main class="py-4">
-        <div class="container">
-            @if (session('status'))
-                <div class="alert alert-success text-center">
-                    <h5>{{ session('status') }}</h5>
-                </div>
-            @endif
-            <a href="{{route('admin.profiles.index')}}" class="btn btn-primary">Users</a>
-            <a href="{{route('admin.restaurants.index')}}" class="btn btn-primary">Restaurant</a>
-            <a href="{{route('admin.consumables.index')}}" class="btn btn-primary">Consumables</a>
-            @yield('content')
-        </div>
-    </main>
+    <div class="container">
+        <nav class="navbar mt-4">
+            <div class="float-right ml-1">
+                <a href="{{route('admin.profiles.index')}}" class="btn btn-secondary">Users</a>
+                <a href="{{route('admin.restaurants.index')}}" class="btn btn-secondary">Restaurants</a>
+                <a href="{{route('admin.consumables.index')}}" class="btn btn-secondary">Consumables</a>
+            </div>
+        </nav>
+        @yield('content')
+    </div>
 </body>
 </html>

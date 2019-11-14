@@ -20,7 +20,7 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        $users = User::simplePaginate(10);
+        $users = User::all();
         return view('admin.profile.index', ['users' => $users]);
     }
 
@@ -142,6 +142,6 @@ class ProfileController extends Controller
     {
         $user = User::find($id);
         $user->delete();
-        return redirect()->route('admin.users')->with('status', 'Profiel van '.$user->name.' succesvol verwijderd');
+        return redirect()->route('admin.profiles.index');
     }
 }

@@ -79,26 +79,13 @@ class RestaurantController extends Controller
         $requestData = $request->all();
         $validateArray = [
             'title' => ['required', 'string', 'max:191', Rule::unique('restaurants')->ignore($restaurant->id)],
-            'kvk' => ['required', 'max:11', 'digits_between:8,12'],
             'address' => ['required', 'string', 'max:191'],
             'zipcode' => ['required', 'string', 'max:7'],
             'city' => ['required', 'string', 'max:191'],
             'phone' => ['required', 'numeric', 'digits_between:8,12', Rule::unique('restaurants')->ignore($restaurant->id)],
             'email' => ['required', 'string', 'email', 'max:191', Rule::unique('restaurants')->ignore($restaurant->id)],
         ];
-        if ($request->photo != null) {
-            $validateArray += ['photo' => ['required', 'image']];
-        }
-        request()->validate($validateArray);
-        if ($request->file('photo') != null) {
-            $originalImage = $request->file('photo');
-            $cropped = Image::make($originalImage)
-                ->fit(200, 200)
-                ->encode('jpg', 80);
-            $img_id = uniqid().'.jpg';
-            $cropped->save('../storage/app/public/'.$img_id);
-            $requestData['photo'] = $img_id;
-        }
+
         $restaurant->update($requestData);
         return redirect()->route('admin.restaurants.index')->with('status', 'Restaurant gegevens van '.$restaurant->title.' succesvol bijgewerkt');
     }
