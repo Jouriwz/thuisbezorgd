@@ -35,6 +35,7 @@ class DatabaseSeeder extends Seeder
         $user->phone = '0623423423';
         $user->email = '123456789@talnet.nl';
         $user->password = bcrypt('testtest');
+        $user->is_admin = 0;
         $user->save();
 
         $restaurant = new Restaurant();
