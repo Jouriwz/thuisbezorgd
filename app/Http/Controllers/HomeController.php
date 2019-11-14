@@ -26,6 +26,7 @@ class HomeController extends Controller
     {
         // returns the index view with all of the restaurants
         $rests = Restaurant::all();
+        
         return view('index')->with('rests', $rests);
     }
 }

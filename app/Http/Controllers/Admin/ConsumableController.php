@@ -15,21 +15,23 @@ class ConsumableController extends Controller
      */
     public function index()
     {
-        $consumables = Consumable::with('restaurant')->simplePaginate(10);
-        // Transform the category numbers to text
+        // Stores the restaurant consumables in a variable
+        $consumables = Consumable::with('restaurant')->get();
+        // Names each category Id
         foreach ($consumables as $key => $consumable) {
             switch ($consumable->category) {
                 case 1:
-                    $consumables[$key]['category'] = 'Eten';
+                    $consumables[$key]['category'] = 'Main Course';
                     break;
                 case 2:
-                    $consumables[$key]['category'] = 'Drinken';
+                    $consumables[$key]['category'] = 'Drinks';
                     break;
                 case 3:
-                    $consumables[$key]['category'] = 'Bijgerecht';
+                    $consumables[$key]['category'] = 'Side Dish';
                     break;
             }
         }
+        
         return view('admin.consumable.index', ['consumables' => $consumables]);
     }
 
@@ -73,7 +75,9 @@ class ConsumableController extends Controller
      */
     public function edit($id)
     {
+        // find current consumable ID
         $consumable = Consumable::find($id);
+
         return view('admin.consumable.edit', ['consumable' => $consumable]);
     }
 
@@ -87,27 +91,16 @@ class ConsumableController extends Controller
     public function update(Request $request, $id)
     {
         $consumable = Consumable::find($id);
-        $requestData = $request->all();
+        $data = $request->all();
         $validateArray = [
             'title' => ['required', 'string', 'max:255'],
             'category' => ['required', 'numeric'],
             'price' => ['required', 'numeric',],
         ];
-        if ($request->photo != null) {
-            $validateArray += ['photo' => ['required', 'image']];
-        }
-        request()->validate($validateArray);
-        if ($request->file('photo') != null) {
-            $originalImage = $request->file('photo');
-            $cropped = Image::make($originalImage)
-                ->fit(200, 200)
-                ->encode('jpg', 80);
-            $img_id = uniqid().'.jpg';
-            $cropped->save('../storage/app/public/'.$img_id);
-            $requestData['photo'] = $img_id;
-        }
-        $consumable->update($requestData);
-        return redirect()->route('admin.consumables.index')->with('status', 'Versnapering '.$consumable->title.' succesvol bijgewerkt');
+ 
+        $consumable->update($data);
+
+        return redirect()->route('admin.consumables.index');
     }
 
     /**
@@ -120,6 +113,7 @@ class ConsumableController extends Controller
     {
         $consumable = Consumable::find($id);
         $consumable->delete();
-        return redirect()->route('admin.consumables.index')->with('status', 'Versnapering succesvol verwijderd');
+        
+        return redirect()->route('admin.consumables.index');
     }
 }

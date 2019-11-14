@@ -7,7 +7,6 @@ use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use App\Consumable;
 use App\Restaurant;
-use Image;
 
 class RestaurantController extends Controller
 {
@@ -18,7 +17,8 @@ class RestaurantController extends Controller
      */
     public function index()
     {
-        $restaurants = Restaurant::simplePaginate(10);
+        $restaurants = Restaurant::get();
+
         return view('admin.restaurant.index', ['restaurants' => $restaurants]);
     }
 
@@ -63,6 +63,7 @@ class RestaurantController extends Controller
     public function edit($id)
     {
         $restaurant = Restaurant::find($id);
+
         return view('admin.restaurant.edit', ['restaurant' => $restaurant]);
     }
 
@@ -87,6 +88,7 @@ class RestaurantController extends Controller
         ];
 
         $restaurant->update($requestData);
+        
         return redirect()->route('admin.restaurants.index')->with('status', 'Restaurant gegevens van '.$restaurant->title.' succesvol bijgewerkt');
     }
 

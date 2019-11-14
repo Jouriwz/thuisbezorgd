@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Consumable;
 use App\Order;
 use App\User;
+use Auth;
 
 
 class ProfileController extends Controller
@@ -21,6 +22,7 @@ class ProfileController extends Controller
     public function index()
     {
         $users = User::all();
+        
         return view('admin.profile.index', ['users' => $users]);
     }
 
@@ -58,13 +60,14 @@ class ProfileController extends Controller
 
     public function orders($id)
     {
-        // Get the current logged in user with his restaurants and orders
+        // Get logged in user with restaurants and orders
         $user = User::where('id', $id)->with('restaurants', 'orders')->get()[0];
-        // Create an empty orders array
+        // Creates a empty array
         $orders = [];
+        // checks of the user has orders
         if (count($user->orders)) {
             foreach ($user->orders as $key => $order) {
-                // Push the consumables of each order to the orders array
+                // pushes the consumables of each order to the array
                 array_push($orders, Order::where('id', $order->id)->with('consumables')->get()[0]);
             }
         }
@@ -83,6 +86,7 @@ class ProfileController extends Controller
     public function edit($id)
     {
         $user = User::find($id);
+
         return view('admin.profile.edit', ['user' => $user]);
     }
 
@@ -96,39 +100,26 @@ class ProfileController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::find($id);
-        $requestData = $request->all();
+        $data= $request->all();
         // Create an array with things to validate if the form gets submitted
-        $validateArray = [
-            'name' => ['required', 'string', 'max:255'],
-            'address' => ['required', 'string', 'max:255'],
-            'zipcode' => ['required', 'string', 'max:7'],
-            'city' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
-            'phone' => ['required', 'numeric', 'digits_between:8,12', Rule::unique('users')->ignore($user->id)],
-        ];
-        // If the password is not null, add it to the validateArray
-        if ($request->password != null)
-        {
-            $validateArray += ['password' => ['required', 'string', 'min:6', 'confirmed']];
-        // If it is null, remove them from the request data so that it wont get updated
+        $user = Auth::user();
+        $user->name = $request->input('name');
+        $user->address = $request->input('address');
+        $user->city = $request->input('city');
+        $user->zipcode = $request->input('zipcode');
+        $user->phone = $request->input('phone');
+        $user->email = $request->input('email');
+        $user->password = bcrypt(request('password'));
+
+        if (isset($data['is_admin'])) {
+            $data['is_admin'] = 1;
         } else {
-            unset($requestData['password']);
-            unset($requestData['password_confirmation']);
+            $data['is_admin'] = 0;
         }
-        // Validate everything is the validate array
-        request()->validate($validateArray);
-        // If the password has changed, encrypt it
-        if($request->password != null)
-        {
-            $requestData['password'] = Hash::make($request->password);
-        }
-        if (isset($requestData['is_admin'])) {
-            $requestData['is_admin'] = 1;
-        } else {
-            $requestData['is_admin'] = 0;
-        }
-        // Update everything that is present in the requestData array
-        $user->update($requestData);
+
+        // Updates the requested data
+        $user->save();
+
         return redirect()->route('admin.profiles.index')->with('status', 'Profiel van '.$user->name.' succesvol bijgewerkt');
     }
 
@@ -142,6 +133,7 @@ class ProfileController extends Controller
     {
         $user = User::find($id);
         $user->delete();
+
         return redirect()->route('admin.profiles.index');
     }
 }

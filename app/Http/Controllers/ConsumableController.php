@@ -26,7 +26,7 @@ class ConsumableController extends Controller
      */
     public function create($id)
     {
-        // returns the consumable create view with the current user ID
+        
         return view('consumables.create', ['id' => $id]);
     }
 
@@ -101,6 +101,7 @@ class ConsumableController extends Controller
     {
         // Destroy the selected consumable
         Consumable::destroy($consumable->id);
+
         return redirect()->back();
     }
 

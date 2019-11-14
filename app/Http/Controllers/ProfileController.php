@@ -17,6 +17,7 @@ class ProfileController extends Controller
     {
         // returns the profile show view with the current logged in user
         $user = User::where('id', Auth::id())->get()[0];
+        
         return view('profiles.show')->with('user', $user);
     }
 
