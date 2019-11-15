@@ -26,7 +26,7 @@ class ConsumableController extends Controller
      */
     public function create($id)
     {
-        
+        // return view with id
         return view('consumables.create', ['id' => $id]);
     }
 
@@ -38,7 +38,7 @@ class ConsumableController extends Controller
      */
     public function store(Request $request, $restaurant_id)
     {
-        // Validation for the input fields
+        // validation
         request()->validate([
             'title' => ['required', 'string', 'max:255'],
             'category' => ['required', 'numeric'],
@@ -102,14 +102,16 @@ class ConsumableController extends Controller
         // Destroy the selected consumable
         Consumable::destroy($consumable->id);
 
+        // redirect back to page before
         return redirect()->back();
     }
 
     public function addToCart($id)
     {
-        // Store the ID of the consumable in the consumable array in the session cookie
+        // stores the consumable id in a array to the session
         session()->push('consumables', $id);
-        // Look up the name of the consumable so it can be added to the cart
+
+        // checks for the consumable name
         $name = Consumable::where('id', $id)->get()[0]['title'];
         return $name;
     }

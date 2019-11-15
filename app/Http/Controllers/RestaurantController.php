@@ -42,7 +42,7 @@ class RestaurantController extends Controller
      */
     public function store(Request $request)
     {
-        // Validation for the input fields
+        // Validation
         request()->validate([
             'title' => ['required', 'string', 'max:255', 'unique:restaurants'],
             'address' => ['required', 'string', 'max:255'],
@@ -54,7 +54,7 @@ class RestaurantController extends Controller
             'close' => ['required']
         ]);
 
-        // Create a new restaurant
+        // Creates a new restaurant
         $restaurant = new Restaurant();
         $restaurant->title = $request->title;
         $restaurant->address = $request->address;
@@ -65,13 +65,14 @@ class RestaurantController extends Controller
         $restaurant->user_id = Auth::id();
         $restaurant->save();
 
-        // Create the openingtimes for the restaurant
+        // Creates openingtimes for the current restaurant
         $openingtimes = new Openingtime();
         $openingtimes->restaurant_id = $restaurant->id;
         $openingtimes->open = $request->open;
         $openingtimes->close = $request->close;
         $openingtimes->save();
 
+        // redirect to show view with current restaurant
         return redirect()->route('restaurant.show', ['restaurant' => $restaurant->id]);
     }
 
@@ -93,20 +94,20 @@ class RestaurantController extends Controller
         }
         
         // Creates the categories
-        $food = [];
+        $main = [];
         $drinks = [];
-        $sides = [];
+        $side = [];
         // Pushes the added consumables to their category
         foreach ($rest[0]->consumables as $key => $consumable) {
             switch ($consumable->category) {
                 case 1:
-                    array_push($food, $rest[0]->consumables[$key]);
+                    array_push($main, $rest[0]->consumables[$key]);
                     break;
                 case 2:
                     array_push($drinks, $rest[0]->consumables[$key]);
                     break;
                 case 3:
-                    array_push($sides, $rest[0]->consumables[$key]);
+                    array_push($side, $rest[0]->consumables[$key]);
                     break;
             }
         }
@@ -114,9 +115,9 @@ class RestaurantController extends Controller
         // returns the restaurant show view with all the categories and products
         return view('restaurants.show', [
             'rest' => $rest[0],
-            'foods' => $food,
+            'foods' => $main,
             'drinks' => $drinks,
-            'sides' => $sides,
+            'sides' => $side,
             'isOpen' => $isOpen,
         ]);
     }
@@ -129,10 +130,11 @@ class RestaurantController extends Controller
      */
     public function edit($id)
     {
+        // current rest id
         $rest = Restaurant::find($id);
-        return view('restaurants.edit', [
-            'rest' => $rest
-        ]);
+
+        // return view with current rest
+        return view('restaurants.edit', ['rest' => $rest]);
     }
 
     /**
@@ -144,29 +146,22 @@ class RestaurantController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // current rest id
         $rest = restaurant::find($id);
-        $requestData = $request->all();
+        // get all user input
+        $Data = $request->all();
+        // validate user input
         $validateArray = [
-            'address' => ['required', 'string', 'max:191'],
+            'address' => ['required', 'string', 'max:255'],
             'zipcode' => ['required', 'string', 'max:7'],
-            'city' => ['required', 'string', 'max:191'],
+            'city' => ['required', 'string', 'max:255'],
         ];
-        if ($request->title != $rest->title) {
-            $validateArray += ['title' => ['required', 'string', 'max:191', 'unique:restaurants']];
-        }
-        if ($request->email != $rest->email) {
-            $validateArray += ['email' => ['required', 'string', 'email', 'max:191', 'unique:restaurants']];
-        }
-        if ($request->phone != $rest->phone) {
-            $validateArray += ['phone' => ['required', 'numeric', 'digits_between:8,12', 'unique:restaurants']];
-        }
-        if ($request->title != $rest->title) {
-            $validateArray += ['title' => ['required', 'string', 'max:191', 'unique:restaurants']];
-        }
-
-        $rest->update($requestData);
+        
+        // update current rest with new data
+        $rest->update($Data);
+        // dd($rest);
+        // redirect index view
         return redirect()->route('profile.index');
-        dd($request);
 
     }
 
@@ -184,19 +179,19 @@ class RestaurantController extends Controller
         }
     public function checkout($restaurant_id)
     {
-        // Get the consumables arrey from the session cookie
+        // get consumables fromm session
         $items = session()->get('consumables');
-        // Get all the data for each item
+        // collect data for items
         $cart = [];
         foreach ($items as $key => $item) {
             array_push($cart, Consumable::where('id', $item)->get()[0]);
         }
-        // Calculate the total price
+        // adds the prices together for total cost
         $total = 0;
         foreach ($cart as $cartItem) {
             $total += $cartItem['price'];
         }
-        // Format the total price and put it in the session
+        // formats totalprice
         $total = number_format($total, 2);
         session()->put('total', $total);
         return view('restaurants.pay', [
@@ -207,17 +202,18 @@ class RestaurantController extends Controller
 
     public function pay($restaurant_id)
     {
-        // Retrieve all the consumables and the total price
+        // gets all consumables and prices
         $items = session()->get('consumables');
         $total = session()->get('total');
 
+        // creates a new order
         $order = new Order();
         $order->user_id = Auth::id();
         $order->restaurant_id = $restaurant_id;
         $order->total = $total;
         $order->save();
 
-        // Attach each consumable to the order
+        // adds the consumables to the order
         foreach ($items as $item) {
             $order->consumables()->attach($item, ['quantity' => 1]);
         }

@@ -61,7 +61,9 @@ class ProfileController extends Controller
      */
     public function edit($id)
     {
+        // checks if current user is auth
         $auth = Auth::user();
+        // find current user
         $user = User::find($id);
 
         // Checks if the user is auth and if the user is on his own profile page
