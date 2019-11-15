@@ -34,10 +34,10 @@
                                         <h3 class="card-title mt-1">{{$food->title}}</h3>
                                         <h4 class="card-text">€{{$food->price}}</h4>
                                         @auth
-                                        @if($isOpen)
-                                        <a class="add-to-cart" id="{{$food->category}}-{{$food->id}}" href="{{route('cart.add', ['id' => $food->id])}}">Toevoegen</a>
+			                            @if($isOpen)
+                                        <a href="{{route('cart.add', ['id' => $food->id])}}" id="{{$food->category}}-{{$food->id}}" class="add-to-cart btn btn-success">Order</a>
                                         @endif
-                                        @endauth
+			                            @endauth
                                     </div>
                                 </div>
                             </div>
@@ -63,7 +63,7 @@
                                         <h4 class="card-text">€{{$drink->price}}</h4>
                                         @auth
 			                            @if($isOpen)
-                                        <a href="{{route('cart.add', ['id' => $drink->id])}}" id="{{$drink->category}}-{{$drink->id}}" class="add-to-cart">Order</a>
+                                        <a href="{{route('cart.add', ['id' => $drink->id])}}" id="{{$drink->category}}-{{$drink->id}}" class="add-to-cart btn btn-success">Order</a>
                                         @endif
 			                            @endauth
                                     </div>
@@ -91,7 +91,7 @@
                                         <h4 class="card-text">€{{$side->price}}</h4>
                                         @auth
 			                            @if($isOpen)
-                                        <a href="{{route('cart.add', ['id' => $side->id])}}" id="{{$side->category}}-{{$side->id}}" class="add-to-cart">Order</a>
+                                        <a href="{{route('cart.add', ['id' => $side->id])}}" id="{{$side->category}}-{{$side->id}}" class="add-to-cart btn btn-success">Order</a>
                                         @endif
 			                            @endauth
                                     </div>
@@ -104,20 +104,21 @@
                 @endif
                 <hr>
             </div>
-            <a href="{{route('checkout', ['id' => $rest->id])}}" class="btn btn-secondary">Afrekenen</a>
         </div>
     </div>
+    @if($isOpen)
     @auth
 	<div class="col-md-3">
 		<div class="cart" style="position: fixed; border: 1px solid black; width: 300px; top: 100px; left: 90px;">
-			<h5 class="text-center">Winkelwagen</h5>
+			<h5 class="text-center">cart</h5>
 			<hr>
 			<ul class="list-group" id="cart" style="list-style: none;">
 			</ul>
-			<a href="{{route('checkout', ['id' => $rest->id])}}" class="btn btn-secondary">Afrekenen</a>
+			<a href="{{route('checkout', ['id' => $rest->id])}}" class="btn btn-secondary">Pay</a>
 		</div>
 	</div>
-	@endauth
+    @endauth
+    @endif
 </div>
 
 <script type="application/javascript">

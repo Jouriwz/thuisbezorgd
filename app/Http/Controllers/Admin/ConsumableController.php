@@ -32,6 +32,7 @@ class ConsumableController extends Controller
             }
         }
         
+        // returns view with consumables
         return view('admin.consumable.index', ['consumables' => $consumables]);
     }
 
@@ -78,6 +79,7 @@ class ConsumableController extends Controller
         // find current consumable ID
         $consumable = Consumable::find($id);
 
+        // returns edit view with current consumable id's
         return view('admin.consumable.edit', ['consumable' => $consumable]);
     }
 
@@ -90,16 +92,20 @@ class ConsumableController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // variable that holds current consumables
         $consumable = Consumable::find($id);
+        // variable that holds all the userr input
         $data = $request->all();
+        // validate user input
         $validateArray = [
             'title' => ['required', 'string', 'max:255'],
             'category' => ['required', 'numeric'],
             'price' => ['required', 'numeric',],
         ];
- 
+        // updates the user data
         $consumable->update($data);
 
+        // return consumables index view
         return redirect()->route('admin.consumables.index');
     }
 
@@ -111,9 +117,12 @@ class ConsumableController extends Controller
      */
     public function destroy($id)
     {
+        // variable that holds current consumable
         $consumable = Consumable::find($id);
+        // deletes the consumables in the variable
         $consumable->delete();
         
+        // returns index view
         return redirect()->route('admin.consumables.index');
     }
 }

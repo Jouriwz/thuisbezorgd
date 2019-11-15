@@ -1,11 +1,11 @@
 @extends('layouts.app')
-
 @section('content')
-<table class="table">
-  <thead>
+
+<table class="table table-bordered table-light mt-4">
+  <thead class="thead-dark">
     <tr>
-      <th scope="col">Product</th>
-      <th scope="col">Prijs</th>
+      <th scope="col">Consumable</th>
+      <th scope="col">Price</th>
     </tr>
   </thead>
   <tbody>
@@ -17,7 +17,7 @@
     @endforeach
   </tbody>
 </table>
-Totaal: €{{$total}} <br>
-<a href="{{route('pay')}}" class="btn btn-primary">Betalen</a>
+<h3>Total: €{{$total}}<h3>
+<a href="{{route('pay')}}" class="btn btn-success">Pay</a>
 
 @endsection

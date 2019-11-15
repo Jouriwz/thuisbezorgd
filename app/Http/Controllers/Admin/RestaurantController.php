@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
-use App\Consumable;
 use App\Restaurant;
+use App\Consumable;
 
 class RestaurantController extends Controller
 {
@@ -17,8 +17,10 @@ class RestaurantController extends Controller
      */
     public function index()
     {
+        // get restaurants
         $restaurants = Restaurant::get();
 
+        // return index view with restaurants
         return view('admin.restaurant.index', ['restaurants' => $restaurants]);
     }
 
@@ -62,8 +64,10 @@ class RestaurantController extends Controller
      */
     public function edit($id)
     {
+        // current restaurant
         $restaurant = Restaurant::find($id);
 
+        // return view with current restaurant
         return view('admin.restaurant.edit', ['restaurant' => $restaurant]);
     }
 
@@ -76,20 +80,25 @@ class RestaurantController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // current rest id
         $restaurant = restaurant::find($id);
-        $requestData = $request->all();
+        // all user input
+        $Data = $request->all();
+        // validate user input
         $validateArray = [
-            'title' => ['required', 'string', 'max:191', Rule::unique('restaurants')->ignore($restaurant->id)],
-            'address' => ['required', 'string', 'max:191'],
+            'title' => ['required', 'string', 'max:255', Rule::unique('restaurants')->ignore($restaurant->id)],
+            'address' => ['required', 'string', 'max:255'],
             'zipcode' => ['required', 'string', 'max:7'],
-            'city' => ['required', 'string', 'max:191'],
-            'phone' => ['required', 'numeric', 'digits_between:8,12', Rule::unique('restaurants')->ignore($restaurant->id)],
-            'email' => ['required', 'string', 'email', 'max:191', Rule::unique('restaurants')->ignore($restaurant->id)],
+            'city' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'numeric', Rule::unique('restaurants')->ignore($restaurant->id)],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('restaurants')->ignore($restaurant->id)],
         ];
 
-        $restaurant->update($requestData);
+        // updates current restaurant with validated data
+        $restaurant->update($Data);
         
-        return redirect()->route('admin.restaurants.index')->with('status', 'Restaurant gegevens van '.$restaurant->title.' succesvol bijgewerkt');
+        // redirect to index
+        return redirect()->route('admin.restaurants.index');
     }
 
     /**
@@ -100,13 +109,19 @@ class RestaurantController extends Controller
      */
     public function destroy($id)
     {
+        // current restaurant id
         $restaurant = Restaurant::find($id);
+        // delete current restaurant
         $restaurant->delete();
 
+        // collects all consumables from restaurant
         $consumables = Consumable::where('restaurant_id', $restaurant->id)->get();
         foreach ($consumables as $consumable) {
+            // delete consumables from targeted restaurant
             $consumable->delete();
         }
-        return redirect()->route('admin.restaurants.index')->with('status', 'Restaurant '.$restaurant->title.' succesvol verwijderd');
+
+        // redirect index
+        return redirect()->route('admin.restaurants.index');
     }
 }

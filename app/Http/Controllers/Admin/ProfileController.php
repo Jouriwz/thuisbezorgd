@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
-use App\Consumable;
-use App\Order;
 use App\User;
+use App\Order;
+use App\Consumable;
 use Auth;
 
 
@@ -21,8 +21,10 @@ class ProfileController extends Controller
      */
     public function index()
     {
+        // get all users
         $users = User::all();
         
+        // return index view with all users
         return view('admin.profile.index', ['users' => $users]);
     }
 
@@ -71,6 +73,8 @@ class ProfileController extends Controller
                 array_push($orders, Order::where('id', $order->id)->with('consumables')->get()[0]);
             }
         }
+
+        // returns the orders view with users and their orders
         return view('admin.profile.orders', [
             'user' => $user,
             'orders' => $orders
@@ -85,8 +89,10 @@ class ProfileController extends Controller
      */
     public function edit($id)
     {
+        // variable that current user id
         $user = User::find($id);
 
+        // return edit view with current user
         return view('admin.profile.edit', ['user' => $user]);
     }
 
@@ -99,10 +105,13 @@ class ProfileController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // current user id
         $user = User::find($id);
+        // all user input
         $data= $request->all();
-        // Create an array with things to validate if the form gets submitted
+        // auth current user
         $user = Auth::user();
+        // changes the data with the users input
         $user->name = $request->input('name');
         $user->address = $request->input('address');
         $user->city = $request->input('city');
@@ -111,6 +120,7 @@ class ProfileController extends Controller
         $user->email = $request->input('email');
         $user->password = bcrypt(request('password'));
 
+        // checks for is_admin
         if (isset($data['is_admin'])) {
             $data['is_admin'] = 1;
         } else {
@@ -120,7 +130,8 @@ class ProfileController extends Controller
         // Updates the requested data
         $user->save();
 
-        return redirect()->route('admin.profiles.index')->with('status', 'Profiel van '.$user->name.' succesvol bijgewerkt');
+        // return index view
+        return redirect()->route('admin.profiles.index');
     }
 
     /**
@@ -131,9 +142,12 @@ class ProfileController extends Controller
      */
     public function destroy($id)
     {
+        // currennt user
         $user = User::find($id);
+        // delete current user
         $user->delete();
 
+        // redirect index view
         return redirect()->route('admin.profiles.index');
     }
 }
