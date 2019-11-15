@@ -101,6 +101,20 @@
                             </div>
                         </div>
 
+                        {{-- openingstimes --}}
+                        <div class="form-group row">
+                            <label for="open" class="col-md-4 col-form-label text-md-right">{{ __('Openings time') }}</label>
+
+                            <div class="col-md-6">
+                                <input type="time" class="form-control" name="open" value="{{old('open')}}">
+                            </div>
+
+                            <label for="close" class="col-md-4 col-form-label text-md-right">{{ __('Closing time') }}</label>
+                            <div class="col-md-6">
+                                <input type="time" class="form-control" name="close" value="{{old('close')}}">
+                            </div>
+                        </div>
+
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
@@ -115,3 +129,17 @@
     </div>
 </div>
 @endsection
+
+{{-- <div class="col-md-9">
+    <div class="form-group">
+        <div class="form-row">
+            <div class="col">
+              <input type="time" class="form-control" name="open" value="{{old('open')}}">
+            </div>
+            tot
+            <div class="col">
+              <input type="time" class="form-control" name="close" value="{{old('close')}}">
+            </div>
+          </div>
+    </div>
+</div> --}}
