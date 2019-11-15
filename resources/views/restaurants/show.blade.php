@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-
+{{session()->put('consumables', [])}}
 <section class="jumbotron text-center mt-4">
     <div class="container">
         <h1 class="jumbotron-heading">{{$rest->title}}</h1>
@@ -32,7 +32,8 @@
                                     <div class="card-block px-2">
                                         <h3 class="card-title mt-1">{{$food->title}}</h3>
                                         <h4 class="card-text">€{{$food->price}}</h4>
-                                        <a href="#" class="btn btn-primary">Order</a>
+                                        <a href="{{route('cart.add', ['id' => $food->id])}}" id="{{$food->category}}-{{$food->id}}" class="btn btn-primary">Order</a>
+                                        
                                     </div>
                                 </div>
                             </div>

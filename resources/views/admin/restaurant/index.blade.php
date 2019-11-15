@@ -1,6 +1,6 @@
 @extends('layouts.admin')
-
 @section('content')
+
 <table class="table table-bordered" style="background-color: #f5f5dc;">
     <thead style="background-color: #40e0d0;">
         <tr>
@@ -21,7 +21,7 @@
             <td>{{$restaurant->user_id}}</td>
             <td>{{$restaurant->email}}</td>
             <td><a href="{{route('admin.restaurants.edit', ['restaurant' => $restaurant->id])}}"
-                    class="btn btn-primary">Edit</a></td>
+                    class="btn btn-success">Edit</a></td>
             <td>
                 <form action="{{route('admin.restaurants.destroy', ['restaurant' => $restaurant->id])}}" method="POST">
                     @csrf

@@ -1,3 +1,4 @@
+{{session()->put('consumables', [])}}
 <nav class="navbar navbar-expand-md navbar-dark shadow-sm">
     <div class="container">
         <a class="navbar-brand" href="{{ url('/') }}">
@@ -23,7 +24,7 @@
                 @endif
                 <!-- Authentication Links -->
                 <li class="nav-item">
-                    <a class="nav-link" href="">Cart</a>
+                    <a class="nav-link" href="">Cart<span class="badge badge-light">4</span></a>
                 </li>
                 @guest
                 <li class="nav-item">

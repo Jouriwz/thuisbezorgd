@@ -1,59 +1,34 @@
 @extends('layouts.app')
-
 @section('content')
-<h3>Orders</h3>
-<hr>
-	@if(count($orders))
-		<div class="orders">
-		    @foreach($orders as $key => $order)
-		    	<div class="card" style="width: 18rem; float: left;">
-				  <div class="card-body">
-				    <h5 class="card-title">Order {{$key + 1}}</h5>
-				    <h6 class="card-subtitle mb-2">{{$order->restaurant->title}}</h6>
-				    <h6 class="card-subtitle mb-2 text-muted">{{$order->created_at}}</h6>
-				    <p class="card-text"></p>
-				    <button type="button" class="card-link" data-toggle="modal" data-target="#orderModal{{$order->id}}">Order bekijken</button>
-				  </div>
-				</div>
-	            <div class="modal fade" id="orderModal{{$order->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-				  <div class="modal-dialog" role="document">
-				    <div class="modal-content">
-				      <div class="modal-header">
-				        <h5 class="modal-title" id="exampleModalLabel">Order {{$key + 1}} - {{$order->restaurant->title}}</h5>
-				        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				          <span aria-hidden="true">&times;</span>
-				        </button>
-				      </div>
-				      <div class="modal-body">
-			        	<table class="table">
-						  <thead>
-						    <tr>
-						      <th scope="col">Product</th>
-						      <th scope="col">Prijs</th>
-						    </tr>
-						  </thead>
-						  <tbody>
-						  	@foreach($order->consumables as $consumable)
-								<tr>
-								  <td>{{$consumable->title}}</td>
-								  <td>€{{$consumable->price}}</td>
-								</tr>
-						    @endforeach
-						  </tbody>
-						</table>
-						<h5 style="font-weight: bold;">Total: €{{$order->total}}</h5>
-				      </div>
-				      <div class="modal-footer">
-				        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				      </div>
-				    </div>
-				  </div>
-				</div>
-		    @endforeach
-		</div>
-	@else
-		<h5>{{$user->name}} heeft geen orders.</h5>
-	@endif
-	</div>
-</div>
+
+<table class="table table-bordered" style="background-color: #f5f5dc;">
+    <thead style="background-color: #40e0d0;">
+        <tr>
+            <th>Id</th>
+            <th>restaurant</th>
+			<th>Created at</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($orders as $key => $order)
+        <tr>
+            <th>{{$order->id}}</th>
+            <td>{{$order->restaurant->title}}</td>
+            <td>{{$order->created_at}}</td>
+            {{-- <td><a href="{{route('admin.restaurants.edit', ['restaurant' => $restaurant->id])}}"
+                    class="btn btn-success">Edit</a></td>
+            <td>
+                <form action="{{route('admin.restaurants.destroy', ['restaurant' => $restaurant->id])}}" method="POST">
+                    @csrf
+                    @method('delete')
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </td>
+            <td><a href="{{route('restaurant.show', ['restaurant' => $restaurant->id])}}"
+                    class="btn btn-warning">View</a></td> --}}
+        </tr>
+        @endforeach
+    </tbody>
+</table>
+
 @endsection

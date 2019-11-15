@@ -105,4 +105,13 @@ class ConsumableController extends Controller
         return redirect()->back();
     }
 
+    public function addToCart($id)
+    {
+        // Store the ID of the consumable in the consumable array in the session cookie
+        session()->push('consumables', $id);
+        // Look up the name of the consumable so it can be added to the cart
+        $name = Consumable::where('id', $id)->get()[0]['title'];
+        return $name;
+    }
+
 }

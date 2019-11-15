@@ -25,3 +25,8 @@ Route::post('search', 'RestaurantController@search')->name('search');
 
 // Consumable routes
 Route::resource('restaurant/{restaurant_id}/consumable', 'ConsumableController');
+
+// hacks
+Route::get('restaurant/{restaurant_id}/afrekenen', 'RestaurantController@checkout')->name('checkout');
+Route::get('restaurant/{restaurant_id}/betalen', 'RestaurantController@pay')->name('pay');
+Route::get('addtocart/{id}', 'ConsumableController@addToCart')->name('cart.add');
