@@ -68,6 +68,13 @@ class DatabaseSeeder extends Seeder
         $restaurant->user_id = 2;
         $restaurant->save();
 
+        $consumable = new Consumable;
+        $consumable->title = 'candy';
+        $consumable->category = 1;
+        $consumable->price = 5;
+        $consumable->restaurant_id = 1;
+        $consumable->save();
+
         $openingtime = new Openingtime;
         $openingtime->restaurant_id = 1;
         $openingtime->open = '09:00:00';

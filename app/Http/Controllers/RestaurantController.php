@@ -8,6 +8,7 @@ use App\Restaurant;
 use App\User;
 use App\Consumable;
 use App\Openingtime;
+use App\Order;
 use Carbon\Carbon;
 
 class RestaurantController extends Controller
@@ -198,7 +199,7 @@ class RestaurantController extends Controller
         // Format the total price and put it in the session
         $total = number_format($total, 2);
         session()->put('total', $total);
-        return view('restaurant.pay', [
+        return view('restaurants.pay', [
             'cart' => $cart,
             'total' => $total
         ]);

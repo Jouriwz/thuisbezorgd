@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 @section('content')
 
 <table class="table table-bordered" style="background-color: #f5f5dc;">
