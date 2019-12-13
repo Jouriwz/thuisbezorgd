@@ -218,7 +218,7 @@ class RestaurantController extends Controller
             $order->consumables()->attach($item, ['quantity' => 1]);
         }
 
-        return redirect()->route('profile.index')->with('status', 'Betaling geslaagd!');
+        return redirect()->route('profile.index');
     }
     
 }

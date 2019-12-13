@@ -28,5 +28,5 @@ Route::resource('restaurant/{restaurant_id}/consumable', 'ConsumableController')
 
 // Cart
 Route::get('addtocart/{id}', 'ConsumableController@addToCart')->name('cart.add');
-Route::get('restaurant/{restaurant_id}/afrekenen', 'RestaurantController@checkout')->name('checkout');
-Route::get('restaurant/{restaurant_id}/betalen', 'RestaurantController@pay')->name('pay');
+Route::get('restaurant/{restaurant_id}/checkout', 'RestaurantController@checkout')->name('checkout');
+Route::get('restaurant/{restaurant_id}/pay', 'RestaurantController@pay')->name('pay');

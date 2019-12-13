@@ -86,5 +86,11 @@ class DatabaseSeeder extends Seeder
         $openingtime->open = '12:00:00';
         $openingtime->close = '20:00:00';
         $openingtime->save();
+
+        $openingtime = new Openingtime;
+        $openingtime->restaurant_id = 3;
+        $openingtime->open = '12:00:00';
+        $openingtime->close = '20:00:00';
+        $openingtime->save();
     }
 }
